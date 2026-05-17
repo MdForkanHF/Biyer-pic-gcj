@@ -7,132 +7,450 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --gold: #B4927A; --gold-dark: #9E7D67; --gold-light: #F5EDE7;
-    --cream: #FAF8F5; --text: #2C2520; --text-muted: #7A6E68;
-    --text-light: #A89E98; --border: #E8DDD7; --white: #FFFFFF;
+    --pink:       #E8637A;
+    --pink-light: #FDE8ED;
+    --pink-soft:  #F9C5CF;
+    --green:      #4A7C59;
+    --green-light:#E8F5EC;
+    --green-soft: #A8D4B4;
+    --cream:      #FDF7F8;
+    --text:       #2C1A20;
+    --text-muted: #7A5560;
+    --text-light: #B08E96;
+    --border:     #F0D5DA;
+    --white:      #FFFFFF;
   }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
-  .hero { text-align: center; padding: 5rem 1.5rem 3rem; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 600px; height: 600px; background: radial-gradient(ellipse, #B4927A15 0%, transparent 70%); pointer-events: none; }
-  .ornament { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 12px; }
-  .ornament::before, .ornament::after { content: ''; width: 40px; height: 0.5px; background: var(--gold); opacity: 0.5; }
-  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 8vw, 64px); font-weight: 400; line-height: 1.1; color: var(--text); margin-bottom: 1rem; }
-  .hero h1 em { font-style: italic; color: var(--gold); }
-  .hero p { font-size: 15px; color: var(--text-muted); max-width: 400px; margin: 0 auto; line-height: 1.75; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
 
-  .divider { display: flex; align-items: center; gap: 16px; max-width: 560px; margin: 0 auto 2.5rem; padding: 0 1.5rem; }
+  /* ══════════════════════════════
+     FLOATING BACKGROUND CANVAS
+  ══════════════════════════════ */
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ══════════════════════════════
+     PAGE CONTENT
+  ══════════════════════════════ */
+  .page { position: relative; z-index: 1; }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+  }
+  .ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    width: 40px; height: 0.5px;
+    background: var(--pink);
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 8vw, 64px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--pink); }
+  .hero p {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1.5rem;
+  }
   .divider-line { flex: 1; height: 0.5px; background: var(--border); }
-  .divider-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); opacity: 0.6; }
+  .divider-diamond {
+    width: 6px; height: 6px;
+    background: var(--green);
+    transform: rotate(45deg);
+    opacity: 0.6;
+  }
 
-  .container { max-width: 560px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+  .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
 
-  .card { background: var(--white); border: 0.5px solid var(--border); border-radius: 16px; padding: 1.75rem; margin-bottom: 1.25rem; animation: fadeUp 0.5s ease both; }
-  .card:nth-child(2) { animation-delay: 0.1s; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-  .card-label { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px; }
-  .card-label::before { content: ''; width: 16px; height: 0.5px; background: var(--gold); }
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 0.5px solid var(--border);
+    border-radius: 20px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .card:nth-child(2) { animation-delay: 0.12s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-label::before { content: ''; width: 16px; height: 0.5px; background: var(--green); }
   .card h3 { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 1rem; }
 
-  .btn-action { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 16px 20px; border-radius: 14px; border: 0.5px solid var(--border); background: var(--white); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; text-decoration: none; margin-bottom: 10px; }
+  /* Action buttons */
+  .btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 0.5px solid var(--border);
+    background: rgba(255,255,255,0.7);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
   .btn-action:last-of-type { margin-bottom: 0; }
-  .btn-action:hover { border-color: var(--gold); background: var(--gold-light); transform: translateY(-1px); }
+  .btn-action:hover {
+    border-color: var(--pink-soft);
+    background: var(--pink-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px #E8637A18;
+  }
+  .btn-upload-main:hover {
+    border-color: var(--pink);
+    background: var(--pink-light);
+  }
+  .btn-view-main:hover {
+    border-color: var(--green-soft);
+    background: var(--green-light);
+  }
   .btn-action-left { display: flex; align-items: center; gap: 14px; }
-  .btn-action-emoji { font-size: 26px; line-height: 1; }
+  .btn-action-emoji { font-size: 28px; line-height: 1; }
   .btn-action-title { font-size: 15px; font-weight: 500; color: var(--text); display: block; }
-  .btn-action-sub { font-size: 12px; color: var(--text-light); display: block; margin-top: 2px; }
-  .btn-action-arrow { font-size: 18px; color: var(--gold); }
+  .btn-action-sub   { font-size: 12px; color: var(--text-light); display: block; margin-top: 2px; }
+  .btn-upload-arrow { font-size: 20px; color: var(--pink); }
+  .btn-view-arrow   { font-size: 20px; color: var(--green); }
 
-  .notice { background: #FFF8F0; border: 0.5px solid #F5C89A; border-radius: 12px; padding: 14px 16px; font-size: 13px; color: #7A4F1E; line-height: 1.6; margin-top: 1rem; display: flex; gap: 10px; align-items: flex-start; }
+  /* Notice */
+  .notice {
+    background: linear-gradient(135deg, var(--pink-light), var(--green-light));
+    border: 0.5px solid var(--pink-soft);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-top: 1rem;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
   .notice-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .notice strong { color: var(--text); }
 
-  .steps { display: flex; flex-direction: column; gap: 14px; }
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 16px; }
   .step-row { display: flex; align-items: flex-start; gap: 14px; }
-  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold-light); border: 0.5px solid #B4927A55; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--gold); flex-shrink: 0; margin-top: 1px; }
-  .step-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; padding-top: 4px; }
+  .step-num {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink-light), var(--green-light));
+    border: 0.5px solid var(--pink-soft);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500;
+    color: var(--pink);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-text { font-size: 14px; color: var(--text-muted); line-height: 1.65; padding-top: 5px; }
   .step-text strong { color: var(--text); font-weight: 500; }
 
-  .footer { text-align: center; padding: 2rem 1.5rem; font-size: 12px; color: var(--text-light); }
-  .footer span { color: var(--gold); }
+  .footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-size: 12px;
+    color: var(--text-light);
+    position: relative; z-index: 1;
+  }
+  .footer span { color: var(--pink); }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="ornament">বিয়ের স্মৃতি</div>
-  <h1>তোমাদের <em>ছবি</em><br>এখানে রাখো</h1>
-  <p>বিয়ের দিনের প্রতিটি মুহূর্ত ধরে রাখো — কোনো login ছাড়াই সরাসরি আপলোড করো।</p>
-</div>
+<!-- Animated background canvas -->
+<canvas id="bgCanvas"></canvas>
 
-<div class="divider">
-  <div class="divider-line"></div>
-  <div class="divider-diamond"></div>
-  <div class="divider-line"></div>
-</div>
+<div class="page">
+  <div class="hero">
+    <div class="ornament">বিয়ের স্মৃতি</div>
+    <h1>তোমাদের <em>ছবি</em><br>এখানে রাখো</h1>
+    <p>বিয়ের দিনের প্রতিটি মুহূর্ত ধরে রাখো — কোনো login ছাড়াই সরাসরি আপলোড করো।</p>
+  </div>
 
-<div class="container">
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-diamond"></div>
+    <div class="divider-line"></div>
+  </div>
 
-  <div class="card">
-    <div class="card-label">এখনই করো</div>
-    <h3>কী করতে চাও?</h3>
+  <div class="container">
+    <div class="card">
+      <div class="card-label">এখনই করো</div>
+      <h3>কী করতে চাও?</h3>
 
-    <a class="btn-action" href="https://drive.google.com/drive/folders/1kYeZNGQgGV8hEn6cPURle8lzC_pW-S9K?usp=drive_link" target="_blank" rel="noopener">
-      <div class="btn-action-left">
-        <span class="btn-action-emoji">📤</span>
-        <div>
-          <span class="btn-action-title">ছবি আপলোড করো</span>
-          <span class="btn-action-sub">তোমার তোলা ছবি folder-এ যোগ করো</span>
+      <a class="btn-action btn-upload-main" href="https://drive.google.com/drive/folders/1kYeZNGQgGV8hEn6cPURle8lzC_pW-S9K?usp=drive_link" target="_blank" rel="noopener">
+        <div class="btn-action-left">
+          <span class="btn-action-emoji">📤</span>
+          <div>
+            <span class="btn-action-title">ছবি আপলোড করো</span>
+            <span class="btn-action-sub">তোমার তোলা ছবি folder-এ যোগ করো</span>
+          </div>
+        </div>
+        <span class="btn-upload-arrow">→</span>
+      </a>
+
+      <a class="btn-action btn-view-main" href="https://drive.google.com/drive/folders/1kYeZNGQgGV8hEn6cPURle8lzC_pW-S9K?usp=drive_link" target="_blank" rel="noopener">
+        <div class="btn-action-left">
+          <span class="btn-action-emoji">🖼️</span>
+          <div>
+            <span class="btn-action-title">সবার ছবি দেখো</span>
+            <span class="btn-action-sub">অন্যরা কী কী আপলোড করেছে দেখো</span>
+          </div>
+        </div>
+        <span class="btn-view-arrow">→</span>
+      </a>
+
+      <div class="notice">
+        <span class="notice-icon">💡</span>
+        <span>Drive খুললে <strong>"+ New → File upload"</strong> চাপো — <strong>কোনো login লাগবে না!</strong></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">কীভাবে করবে</div>
+      <h3>ছবি আপলোড করার নিয়ম</h3>
+      <div class="steps">
+        <div class="step-row">
+          <div class="step-num">১</div>
+          <div class="step-text"><strong>"ছবি আপলোড করো"</strong> বাটনে ক্লিক করো</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">২</div>
+          <div class="step-text">Google Drive folder খুলবে — <strong>"+ New → File upload"</strong> চাপো</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">৩</div>
+          <div class="step-text">ফোন বা কম্পিউটার থেকে <strong>যত খুশি ছবি</strong> বেছে নাও</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">৪</div>
+          <div class="step-text">Upload শেষ হলেই <strong>সবাই দেখতে পাবে</strong> — কোনো login লাগবে না!</div>
         </div>
       </div>
-      <span class="btn-action-arrow">→</span>
-    </a>
-
-    <a class="btn-action" href="https://drive.google.com/drive/folders/1kYeZNGQgGV8hEn6cPURle8lzC_pW-S9K?usp=drive_link" target="_blank" rel="noopener">
-      <div class="btn-action-left">
-        <span class="btn-action-emoji">🖼️</span>
-        <div>
-          <span class="btn-action-title">সবার ছবি দেখো</span>
-          <span class="btn-action-sub">অন্যরা কী কী আপলোড করেছে দেখো</span>
-        </div>
-      </div>
-      <span class="btn-action-arrow">→</span>
-    </a>
-
-    <div class="notice">
-      <span class="notice-icon">💡</span>
-      <span>Google Drive খুললে উপরে <strong>"+ New → File upload"</strong> বাটন দেখবে — সেখান থেকে ছবি add করো। <strong>কোনো account বা login লাগবে না!</strong></span>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-label">কীভাবে করবে</div>
-    <h3>ছবি আপলোড করার নিয়ম</h3>
-    <div class="steps">
-      <div class="step-row">
-        <div class="step-num">১</div>
-        <div class="step-text">উপরের <strong>"ছবি আপলোড করো"</strong> বাটনে ক্লিক করো</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">২</div>
-        <div class="step-text">Google Drive folder খুলবে — উপরে <strong>"+ New → File upload"</strong> চাপো</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">৩</div>
-        <div class="step-text">ফোন বা কম্পিউটার থেকে <strong>যত খুশি ছবি</strong> বেছে নাও</div>
-      </div>
-      <div class="step-row">
-        <div class="step-num">৪</div>
-        <div class="step-text">Upload শেষ হলেই <strong>সবাই দেখতে পাবে</strong> — কোনো login লাগবে না!</div>
-      </div>
-    </div>
+  <div class="footer">
+    তৈরি করেছে <span>♥</span> বিয়ের পরিবারের জন্য
   </div>
-
 </div>
 
-<div class="footer">
-  তৈরি করেছে <span>♥</span> বিয়ের পরিবারের জন্য
-</div>
+<script>
+// ════════════════════════════════════════════════════════
+//  BACKGROUND PHOTO LIST
+//  ✏️ এখানে তোমার ছবির নাম গুলো লেখো
+//  ছবিগুলো index.html এর পাশে "images" folder এ রাখো
+//  উদাহরণ: images/pic1.jpg, images/pic2.jpg
+// ════════════════════════════════════════════════════════
+const PHOTOS = [
+  'images/wedding-pic 1.jpg',   // ← ছবি ১
+  'images/wedding-pic 2.jpg',   // ← ছবি ২
+  'images/wedding-pic 3.jpg',   // ← ছবি ৩
+  'images/wedding-pic 4.jpg',   // ← ছবি ৪
+  'images/wedding-pic 5.jpg',   // ← ছবি ৫
+  'images/wedding-pic 2.jpg',   // ← ছবি ৬
+];
+// ════════════════════════════════════════════════════════
 
+const canvas = document.getElementById('bgCanvas');
+const ctx    = canvas.getContext('2d');
+
+// ── Flower SVG paths (drawn on canvas) ──
+function drawFlower(ctx, x, y, size, color, opacity) {
+  ctx.save();
+  ctx.globalAlpha = opacity;
+  ctx.translate(x, y);
+
+  const petalCount = 5;
+  const petalLen   = size;
+  const petalW     = size * 0.45;
+
+  for (let i = 0; i < petalCount; i++) {
+    ctx.save();
+    ctx.rotate((i / petalCount) * Math.PI * 2);
+    ctx.beginPath();
+    ctx.ellipse(0, -petalLen * 0.55, petalW * 0.5, petalLen * 0.55, 0, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.restore();
+  }
+  // Center
+  ctx.beginPath();
+  ctx.arc(0, 0, size * 0.22, 0, Math.PI * 2);
+  ctx.fillStyle = '#FBEAA0';
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// ── Particle class ──
+class Particle {
+  constructor(type, imgObj) {
+    this.type   = type; // 'flower' | 'photo'
+    this.imgObj = imgObj || null;
+    this.reset(true);
+  }
+
+  reset(initial) {
+    this.x     = Math.random() * canvas.width;
+    this.y     = initial ? Math.random() * canvas.height : canvas.height + 100;
+    this.vx    = (Math.random() - 0.5) * 0.4;
+    this.vy    = -(Math.random() * 0.5 + 0.2);
+    this.angle = Math.random() * Math.PI * 2;
+    this.va    = (Math.random() - 0.5) * 0.005;
+    this.opacity = this.type === 'photo'
+      ? Math.random() * 0.09 + 0.04
+      : Math.random() * 0.25 + 0.1;
+
+    if (this.type === 'flower') {
+      this.size  = Math.random() < 0.4
+        ? Math.random() * 10 + 6    // small
+        : Math.random() * 22 + 16;  // big
+      const palette = ['#F48FB1','#F06292','#A5D6A7','#81C784','#F8BBD0','#C8E6C9','#FF8A80','#69F0AE'];
+      this.color = palette[Math.floor(Math.random() * palette.length)];
+    } else {
+      this.size = Math.random() * 90 + 60;
+    }
+  }
+
+  update() {
+    this.x     += this.vx;
+    this.y     += this.vy;
+    this.angle += this.va;
+    if (this.y < -200) this.reset(false);
+    if (this.x < -200) this.x = canvas.width + 100;
+    if (this.x > canvas.width + 200) this.x = -100;
+  }
+
+  draw(ctx) {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+
+    if (this.type === 'flower') {
+      drawFlower(ctx, 0, 0, this.size, this.color, this.opacity);
+    } else if (this.imgObj && this.imgObj.complete && this.imgObj.naturalWidth > 0) {
+      ctx.globalAlpha = this.opacity;
+      const s = this.size;
+      const r = 10;
+      ctx.beginPath();
+      ctx.roundRect(-s/2, -s/2, s, s, r);
+      ctx.clip();
+      ctx.drawImage(this.imgObj, -s/2, -s/2, s, s);
+    }
+    ctx.restore();
+  }
+}
+
+// ── Setup ──
+let particles = [];
+let loadedImgs = [];
+let animId;
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function initParticles() {
+  particles = [];
+  // 28 flowers
+  for (let i = 0; i < 28; i++) {
+    particles.push(new Particle('flower'));
+  }
+  // 6 photos (one per image)
+  loadedImgs.forEach(img => {
+    particles.push(new Particle('photo', img));
+  });
+}
+
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(ctx); });
+  animId = requestAnimationFrame(loop);
+}
+
+// Load photos first, then start
+let loaded = 0;
+if (PHOTOS.length === 0) {
+  initParticles();
+  loop();
+} else {
+  PHOTOS.forEach(src => {
+    const img = new Image();
+    img.onload  = () => { loadedImgs.push(img); loaded++; if (loaded === PHOTOS.length) { initParticles(); loop(); } };
+    img.onerror = () => {            loaded++; if (loaded === PHOTOS.length) { initParticles(); loop(); } };
+    img.src = src;
+  });
+}
+</script>
 </body>
 </html>
