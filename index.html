@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>বিয়ের ছবি — শেয়ার করো</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #B4927A;
+    --gold-dark: #9E7D67;
+    --gold-light: #F5EDE7;
+    --cream: #FAF8F5;
+    --text: #2C2520;
+    --text-muted: #7A6E68;
+    --text-light: #A89E98;
+    --border: #E8DDD7;
+    --white: #FFFFFF;
+    --success-bg: #EAF3DE;
+    --success-text: #3B6D11;
+    --error-bg: #FCEBEB;
+    --error-text: #A32D2D;
+    --info-bg: #E6F1FB;
+    --info-text: #185FA5;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 5rem 1.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, #B4927A18 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .ornament {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    width: 40px; height: 0.5px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 8vw, 68px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    padding: 0 1.5rem;
+  }
+  .divider-line { flex: 1; height: 0.5px; background: var(--border); }
+  .divider-diamond {
+    width: 6px; height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    opacity: 0.6;
+  }
+
+  /* ── Main Container ── */
+  .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--white);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:nth-child(2) { animation-delay: 0.1s; }
+  .card:nth-child(3) { animation-delay: 0.2s; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+  }
+  .step-badge::before {
+    content: '';
+    width: 16px; height: 0.5px;
+    background: var(--gold);
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  /* ── Input ── */
+  input[type="text"] {
+    width: 100%;
+    padding: 11px 15px;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: var(--gold); }
+  input[type="text"]::placeholder { color: var(--text-light); }
+
+  /* ── Drop Zone ── */
+  .drop-zone {
+    border: 1.5px dashed #B4927A55;
+    border-radius: 14px;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+    position: relative;
+  }
+  .drop-zone:hover, .drop-zone.active {
+    border-color: var(--gold);
+    background: var(--gold-light);
+  }
+  .drop-zone-icon {
+    font-size: 40px;
+    margin-bottom: 0.75rem;
+    display: block;
+    transition: transform 0.2s;
+  }
+  .drop-zone:hover .drop-zone-icon { transform: translateY(-3px); }
+  .drop-zone h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .drop-zone p {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  input[type="file"] { display: none; }
+
+  /* ── File List ── */
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .file-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 13px;
+    background: var(--cream);
+    border-radius: 10px;
+    border: 0.5px solid var(--border);
+    font-size: 13px;
+    animation: fadeUp 0.3s ease both;
+  }
+  .file-icon { font-size: 18px; flex-shrink: 0; }
+  .file-name {
+    flex: 1;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .file-size { color: var(--text-light); font-size: 12px; white-space: nowrap; }
+  .file-remove {
+    cursor: pointer;
+    color: var(--text-light);
+    font-size: 18px;
+    line-height: 1;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 2px;
+  }
+  .file-remove:hover { color: #A32D2D; }
+
+  /* ── Upload Button ── */
+  .btn-upload {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.02em;
+  }
+  .btn-upload:hover { background: var(--gold-dark); transform: translateY(-1px); }
+  .btn-upload:active { transform: translateY(0); }
+  .btn-upload:disabled {
+    background: var(--border);
+    color: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    margin-top: 1rem;
+    display: none;
+  }
+  .progress-track {
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.35s ease;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    text-align: center;
+  }
+
+  /* ── Status ── */
+  .status {
+    display: none;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-top: 1rem;
+  }
+  .status-success { background: var(--success-bg); color: var(--success-text); border: 0.5px solid #97C459; }
+  .status-error { background: var(--error-bg); color: var(--error-text); border: 0.5px solid #F09595; }
+  .status-info { background: var(--info-bg); color: var(--info-text); border: 0.5px solid #85B7EB; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .footer span { color: var(--gold); }
+
+  /* ── Auth overlay ── */
+  #authOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 37, 32, 0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  #authOverlay.show { display: flex; }
+  .auth-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    max-width: 360px;
+    width: 90%;
+    text-align: center;
+  }
+  .auth-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+  .auth-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+  .btn-google {
+    width: 100%;
+    padding: 12px;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--white);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.15s;
+    color: var(--text);
+  }
+  .btn-google:hover { background: var(--cream); }
+</style>
+</head>
+<body>
+
+<!-- Auth overlay -->
+<div id="authOverlay">
+  <div class="auth-card">
+    <div style="font-size:36px;margin-bottom:1rem">🔐</div>
+    <h2>Google Login</h2>
+    <p>ছবি আপলোড করতে একবার Google account দিয়ে permission দিতে হবে। এটা শুধু Drive-এ upload করার জন্য।</p>
+    <button class="btn-google" id="googleSignInBtn">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+      Google দিয়ে অনুমতি দাও
+    </button>
+    <p style="margin-top:1rem;font-size:11px;color:var(--text-light)">তোমার কোনো data আমরা দেখতে পাব না</p>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="ornament">বিয়ের স্মৃতি</div>
+  <h1>তোমাদের <em>ছবি</em><br>এখানে রাখো</h1>
+  <p>বিয়ের দিনের মুহূর্তগুলো সবার সাথে ভাগ করে নাও — সরাসরি Drive-এ।</p>
+</div>
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-diamond"></div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- Upload Form -->
+<div class="container">
+
+  <div class="card">
+    <div class="step-badge">ধাপ ১</div>
+    <h3>তোমার নাম লেখো</h3>
+    <input type="text" id="guestName" placeholder="যেমন: Rafi Bhai, Aunt Mina..." maxlength="40">
+  </div>
+
+  <div class="card">
+    <div class="step-badge">ধাপ ২</div>
+    <h3>ছবি বেছে নাও</h3>
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()" role="button" tabindex="0">
+      <span class="drop-zone-icon">📷</span>
+      <h4>ক্লিক করো বা ছবি টেনে আনো</h4>
+      <p>JPG, PNG, HEIC · সর্বোচ্চ 20MB প্রতিটি</p>
+    </div>
+    <input type="file" id="fileInput" multiple accept="image/*">
+    <div class="file-list" id="fileList"></div>
+  </div>
+
+  <div class="card">
+    <div class="step-badge">ধাপ ৩</div>
+    <h3>আপলোড করো</h3>
+    <button class="btn-upload" id="uploadBtn" onclick="handleUpload()">
+      ☁️ Google Drive-এ পাঠাও
+    </button>
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">অপেক্ষা করো...</div>
+    </div>
+    <div class="status status-info" id="statusInfo"></div>
+    <div class="status status-success" id="statusSuccess"></div>
+    <div class="status status-error" id="statusError"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  তৈরি করেছে <span> CEC </span> বিয়ের পরিবারের জন্য
+</div>
+
+<!-- Google Identity Services -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<script>
+  // ═══════════════════════════════════════════
+  //  CONFIG — শুধু CLIENT_ID টা বসাও
+  // ═══════════════════════════════════════════
+  const CLIENT_ID  = "226817291708-budpuhd172s6smcb5ng7oguis8agldm2.apps.googleusercontent.com"; // 👈 এখানে তোমার Client ID দাও
+  const FOLDER_ID  = "1kYeZNGQgGV8hEn6cPURle8lzC_pW-S9K";
+  const SCOPES     = "https://www.googleapis.com/auth/drive.file";
+  // ═══════════════════════════════════════════
+
+  let selectedFiles = [];
+  let accessToken   = null;
+  let tokenClient   = null;
+  let uploadPending = false;
+
+  // ── Drag & Drop ──
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+
+  dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('active'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('active'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('active');
+    addFiles(e.dataTransfer.files);
+  });
+  dropZone.addEventListener('keydown', e => { if (e.key === 'Enter') fileInput.click(); });
+  fileInput.addEventListener('change', () => addFiles(fileInput.files));
+
+  function addFiles(files) {
+    for (const f of files) {
+      if (f.size > 20 * 1024 * 1024) { showStatus('error', `"${f.name}" ফাইলটা 20MB-এর বেশি।`); continue; }
+      if (!selectedFiles.find(x => x.name === f.name && x.size === f.size)) selectedFiles.push(f);
+    }
+    renderFileList();
+  }
+
+  function renderFileList() {
+    const list = document.getElementById('fileList');
+    list.innerHTML = '';
+    selectedFiles.forEach((f, i) => {
+      const el = document.createElement('div');
+      el.className = 'file-item';
+      const mb = (f.size / 1048576).toFixed(1);
+      el.innerHTML = `
+        <span class="file-icon">🖼️</span>
+        <span class="file-name">${escHtml(f.name)}</span>
+        <span class="file-size">${mb} MB</span>
+        <button class="file-remove" onclick="removeFile(${i})" aria-label="সরাও">✕</button>`;
+      list.appendChild(el);
+    });
+  }
+
+  function removeFile(i) { selectedFiles.splice(i, 1); renderFileList(); }
+  function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // ── Status helpers ──
+  function showStatus(type, msg) {
+    ['Info','Success','Error'].forEach(t => document.getElementById('status'+t).style.display = 'none');
+    const el = document.getElementById('status' + type.charAt(0).toUpperCase() + type.slice(1));
+    el.textContent = msg; el.style.display = 'block';
+  }
+  function hideStatus() {
+    ['Info','Success','Error'].forEach(t => document.getElementById('status'+t).style.display = 'none');
+  }
+
+  // ── Auth ──
+  function initTokenClient() {
+    if (!window.google) { showStatus('error', 'Google লোড হয়নি। Page refresh করো।'); return false; }
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CLIENT_ID,
+      scope: SCOPES,
+      callback: async (res) => {
+        if (res.error) { showStatus('error', 'Login বাতিল হয়েছে।'); return; }
+        accessToken = res.access_token;
+        document.getElementById('authOverlay').classList.remove('show');
+        if (uploadPending) { uploadPending = false; await uploadAll(); }
+      }
+    });
+    return true;
+  }
+
+  function requestAuth() {
+    if (!initTokenClient()) return;
+    document.getElementById('authOverlay').classList.add('show');
+    document.getElementById('googleSignInBtn').onclick = () => tokenClient.requestAccessToken({ prompt: 'consent' });
+  }
+
+  // ── Upload ──
+  async function handleUpload() {
+    hideStatus();
+    if (CLIENT_ID === 'YOUR_CLIENT_ID_HERE') {
+      showStatus('error', '⚠️ index.html-এ CLIENT_ID বসাওনি। Setup করো আগে।'); return;
+    }
+    if (selectedFiles.length === 0) { showStatus('error', 'আগে কিছু ছবি বেছে নাও!'); return; }
+    if (!accessToken) { uploadPending = true; requestAuth(); return; }
+    await uploadAll();
+  }
+
+  async function uploadAll() {
+    const btn = document.getElementById('uploadBtn');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+    const name = document.getElementById('guestName').value.trim() || 'অতিথি';
+
+    btn.disabled = true;
+    btn.textContent = 'আপলোড হচ্ছে...';
+    progressWrap.style.display = 'block';
+    hideStatus();
+
+    let done = 0;
+    const total = selectedFiles.length;
+
+    for (const f of selectedFiles) {
+      progressLabel.textContent = `${done + 1} / ${total} — ${f.name}`;
+      const meta = JSON.stringify({ name: `[${name}] ${f.name}`, parents: [FOLDER_ID] });
+      const form = new FormData();
+      form.append('metadata', new Blob([meta], { type: 'application/json' }));
+      form.append('file', f);
+
+      try {
+        const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + accessToken },
+          body: form
+        });
+        if (!res.ok) {
+          if (res.status === 401) { accessToken = null; uploadPending = true; requestAuth(); return; }
+          throw new Error('Upload failed: ' + res.status);
+        }
+        done++;
+        progressFill.style.width = Math.round((done / total) * 100) + '%';
+      } catch (err) {
+        showStatus('error', `"${f.name}" আপলোড হয়নি। আবার চেষ্টা করো।`);
+        btn.disabled = false; btn.innerHTML = '☁️ Google Drive-এ পাঠাও';
+        return;
+      }
+    }
+
+    progressFill.style.width = '100%';
+    progressLabel.textContent = 'সম্পন্ন!';
+    showStatus('success', `✅ ${done}টি ছবি সফলভাবে পাঠানো হয়েছে! অনেক ধন্যবাদ 💛`);
+    selectedFiles = []; renderFileList();
+    btn.disabled = false; btn.innerHTML = '☁️ Google Drive-এ পাঠাও';
+    setTimeout(() => { progressWrap.style.display = 'none'; progressFill.style.width = '0%'; }, 3000);
+  }
+</script>
+</body>
+</html>
